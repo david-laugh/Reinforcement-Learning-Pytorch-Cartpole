@@ -11,7 +11,7 @@ class Worker(mp.Process):
         super(Worker, self).__init__()
 
         self.env = gym.make(env_name)
-        self.env.seed(500)
+        # self.env.seed(500)
 
         self.name = 'w%i' % name
         self.global_ep, self.global_ep_r, self.res_queue = global_ep, global_ep_r, res_queue
@@ -47,15 +47,14 @@ class Worker(mp.Process):
             steps = 0
 
             state = self.env.reset()
-            state = torch.Tensor(state)
+            state = torch.Tensor(state[0])
             state = state.unsqueeze(0)
             memory = Memory(n_step)
 
             while True:
                 policy, value = self.local_model(state)
                 action = self.get_action(policy, self.num_actions)
-
-                next_state, reward, done, _ = self.env.step(action)
+                next_state, reward, done, _, _ = self.env.step(action)
                 next_state = torch.Tensor(next_state)
                 next_state = next_state.unsqueeze(0)
 

@@ -7,4 +7,4 @@ goal_score = 200
 log_interval = 10
 n_step = 10
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-max_episode = 30000
+max_episode = 10

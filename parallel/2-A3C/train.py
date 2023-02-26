@@ -9,9 +9,10 @@ import torch.multiprocessing as mp
 
 from config import env_name, lr
 
+
 def main():
     env = gym.make(env_name)
-    env.seed(500)
+    # env.seed(500)
     torch.manual_seed(500)
 
     num_inputs = env.observation_space.shape[0]
@@ -23,7 +24,7 @@ def main():
 
     writer = SummaryWriter('logs')
 
-    workers = [Worker(global_model, global_optimizer, global_ep, global_ep_r, res_queue, i) for i in range(mp.cpu_count())]
+    workers = [Worker(global_model, global_optimizer, global_ep, global_ep_r, res_queue, i) for i in range(int(mp.cpu_count() * (2/3)))]
     [w.start() for w in workers]
     res = []
     while True:
@@ -36,6 +37,7 @@ def main():
         else:
             break
     [w.join() for w in workers]
+
 
 if __name__=="__main__":
     main()

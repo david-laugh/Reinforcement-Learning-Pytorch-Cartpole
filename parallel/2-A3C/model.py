@@ -60,7 +60,6 @@ class LocalModel(Model):
             running_return = rewards[t] + gamma * running_return * masks[t]
             running_returns[t] = running_return
 
-
         td_error = running_returns - value.detach()
         log_policy = (torch.log(policy + 1e-10) * actions).sum(dim=1, keepdim=True)
         loss_policy = - log_policy * td_error
